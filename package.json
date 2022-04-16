@@ -1,0 +1,8 @@
+{
+  "name": "LShare",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:zhangzhenxi0316/LShare.git",
+  "author": "zhangzhenxi <zhangzhenxi0316@163.com>",
+  "license": "MIT"
+}
