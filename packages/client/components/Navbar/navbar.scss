@@ -1,0 +1,32 @@
+.nav-bar{
+    height: 48px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+    border-bottom: .5px solid rgba(0,0,0,.2);
+    .logo-info{
+        display: flex;
+        align-items: center;
+        height: 100%;
+        .logo-image{
+            width: 32px;
+            height: 32px;
+            background-image: url('../../common/images/logo.png');
+            background-size: cover;
+            border-radius: 4px;
+            margin-right: 8px;
+        }
+        .logo-title{
+            font-size: 13px;
+            font-weight: 500;
+        }
+    }
+    .nav-more{
+        background-image: url(../../common/images/nav-more.svg);
+        background-size: cover;
+        width: 24px;
+        height: 24px;
+    }
+}

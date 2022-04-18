@@ -3,7 +3,11 @@ const path = require("path");
 const { Configuration } = require("webpack");
 const webpackCommonConfig = require("@features/commonConfig");
 const { merge } = require("webpack-merge");
-const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");//TODO 不生效
+const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin"); //TODO 不生效
+const pxtorem = require("postcss-pxtorem");
+const autoprefixer = require("autoprefixer");
+const PostCssFlexBugFixes = require("postcss-flexbugs-fixes");
+
 const isDevelopment = process.env.NODE_ENV !== "production";
 console.log(path.resolve(__dirname, "./template/index.html"));
 /**
@@ -28,7 +32,28 @@ module.exports = merge(webpackCommonConfig, {
       //   style
       {
         test: /\.(scss|css)$/,
-        use: ["style-loader", "css-loader", "sass-loader", "postcss-loader"],
+        use: [
+          "style-loader",
+          "css-loader",
+          {
+            loader: "postcss-loader",
+            options: {
+              postcssOptions: {
+                plugins: [
+                  pxtorem({
+                    rootValue: (375 * 20) / 320,
+                    propList: ["*"],
+                    minPixelValue: 1,
+                    selectorBlackList: ["data-dpr="],
+                  }),
+                  autoprefixer({ flexbox: "no-2009" }),
+                  PostCssFlexBugFixes,
+                ],
+              },
+            },
+          },
+          "sass-loader",
+        ],
       },
       // ts | tsx
       {
@@ -39,6 +64,7 @@ module.exports = merge(webpackCommonConfig, {
             options: {
               presets: ["@babel/preset-env"],
               plugins: [
+                // "@babel/plugin-transform-runtime",
                 isDevelopment && require.resolve("react-refresh/babel"),
               ].filter(Boolean),
             },
@@ -64,6 +90,19 @@ module.exports = merge(webpackCommonConfig, {
           directory: path.join(__dirname, "build"),
         },
         port: 9102,
+        client: {
+          progress: true,
+        },
+        historyApiFallback: true,
       }
     : {},
+  resolve: {
+    alias: {
+      entry: path.resolve(__dirname, "entry"),
+      common: path.resolve(__dirname, "common"),
+      components: path.resolve(__dirname, "components"),
+    },
+    extensions: [".ts", ".tsx", ".js", ".json"],
+    mainFields: ["main", ",module"],
+  },
 });

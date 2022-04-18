@@ -1,0 +1,19 @@
+.feed-container{
+    .feed-article-list{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        background-color: #f7f7f7;
+        padding: 0 4px;
+        .feed-article-list-left,.feed-article-list-right{
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            width: calc(50% - 2px);
+        }
+        .feed-article-list-left{
+            margin-right: 4px;
+        }
+    }
+}
