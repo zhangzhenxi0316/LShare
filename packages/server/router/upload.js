@@ -4,21 +4,18 @@ const multer = require("multer");
 const fs = require("fs");
 var jwt = require("jsonwebtoken");
 const { ArticleModel, UserModel, ObjectId } = require("../db");
+const auth = require("../middleware/auth");
 
 let secrect = "qwert";
 
 var upload = multer({ dest: "public/" });
-
-router.post("/publish", async (req, res) => {
+// 发布文章
+router.post("/publish",auth, async (req, res) => {
   const { covers = [], title = "", content = "" } = req.body;
-  console.log('content---',content)
   const addTime = Date.now();
   const userId =
     (req.cookies.jwt && jwt.verify(req.cookies.jwt, secrect).user_id) || "";
-  if (!userId) {
-    res.json({ code: 400, message: "登陆过期请重新登陆" });
-    return;
-  }
+
   try {
     const _id = new ObjectId();
     const user = await UserModel.findById(userId);
@@ -28,18 +25,35 @@ router.post("/publish", async (req, res) => {
       title,
       content,
       addTime,
-      author: user,
-      authorId: userId,
+      author: ObjectId(userId)
     });
-    user.postIds.unshift(_id);
-    const [article] = await Promise.all([articleService.save(),user.save()]);
+    user.posts.unshift(ObjectId(_id));
+    const [article] = await Promise.all([articleService.save(), user.save()]);
     res.json({ code: 200, message: "发文成功", article });
   } catch (error) {
     console.log(error);
     res.json({ code: 400, message: `发文失败: ${JSON.stringify(error)}` });
   }
 });
-
+router.post("/editorUser",auth, async (req, res) => {
+  try {
+    const { avatarUrl, userName, description } = req.body;
+    const userId =
+      (req.cookies.jwt && jwt.verify(req.cookies.jwt, secrect).user_id) || "";
+    await UserModel.findByIdAndUpdate(userId, {
+      $set: {
+        avatarUrl,
+        description,
+        userName,
+      },
+    });
+    res.json({ code: 200, message: "更新成功" });
+  } catch (error) {
+    console.log(error);
+    res.json({ code: 400, message: `发生错误${JSON.stringify(error)}` });
+  }
+});
+// 图片存储服务
 router.use(upload.any());
 router.post("/image", upload.single("file"), (req, res) => {
   const path = req.files[0].path;

@@ -7,7 +7,6 @@ type WrapperProps = {
   className?: string;
 };
 const Wrapper = (props: WrapperProps) => {
-    console.log(!isMobile())
   return (
     <div className={cs("chore-wrapper", { isPc: !isMobile() },props.className)}>
       {props.children}

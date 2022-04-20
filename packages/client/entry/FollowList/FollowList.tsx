@@ -43,13 +43,14 @@ const FollowList = () => {
           className={cs("following-list", { active: active === "following" })}
           onClick={handleFolowingClick}
         >
-          关注列表
+          <div className="center">关注列表</div>
         </div>
+        <div className="line">|</div>
         <div
           className={cs("follower-list", { active: active === "follow" })}
           onClick={handleFolowerClick}
         >
-          粉丝列表
+          <div className="center">关注列表</div>
         </div>
       </div>
       <div className="follow-list">

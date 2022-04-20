@@ -14,6 +14,7 @@ function generateToken(id) {
     secrect
   );
 }
+// 登陆接口
 router.post("/login", async (req, res) => {
   console.log("req.body", req.body);
   const { username, password } = req.body;
@@ -48,15 +49,29 @@ router.post("/login", async (req, res) => {
     }
   }
 });
+
+// 验证登陆是否失效
 router.get("/login/isValidate", async (req, res) => {
-  const user_id =
-    req.cookies.jwt && jwt.verify(req.cookies.jwt, secrect).user_id;
-  console.log(user_id);
-  if (user_id) {
-    res.json({ code: 200, message: "ok", user_id });
-  } else {
-    res.json({ code: 400, message: "登陆过期" });
+  try {
+    console.log(11222222);
+    const user_id =
+      req.cookies.jwt && jwt.verify(req.cookies.jwt, secrect).user_id;
+    console.log('---', user_id);
+    if (user_id) {
+      res.json({ code: 200, message: "ok", user_id });
+      res.end();
+      return;
+    } else {
+      res.json({ code: 500, message: "登陆过期" });
+      return;
+    }
+  } catch (error) {
+    console.log("error--", error);
   }
-  return;
+});
+
+router.post("/logout", async (req, res) => {
+  res.clearCookie("jwt");
+  res.json({ code: 200, message: "退出成功" });
 });
 module.exports = router;

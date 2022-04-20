@@ -1,0 +1,135 @@
+.editor-container {
+  padding: 10px;
+  position: relative;
+  padding-top: 48px;
+  box-sizing: border-box;
+  width: 100%;
+//   overflow: hidden;
+  .editor-titlebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 44px;
+    font-size: 16px;
+    font-weight: 500;
+    width: 100%;
+    background-color: #fff;
+    z-index: 1000;
+    border-bottom: 0.5px solid rgba($color: #000000, $alpha: 0.2);
+    .back-icon {
+      background-image: url(../../common/images/back.svg);
+      background-size: cover;
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+  .publish-toast {
+    position: fixed;
+    min-width: 150px;
+    max-width: 250px;
+    padding: 15px;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 15px;
+    border-radius: 8px;
+    background-color: rgba($color: #000000, $alpha: 0.4);
+    transform: translateX(-50%) translateY(-50%);
+  }
+  .upload-image-area {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    padding-bottom: 10px;
+    border-bottom: 0.5px solid rgba($color: #000000, $alpha: 0.2);
+    .upload-image-button {
+      margin-right: 10px;
+      position: relative;
+      width: 100px;
+      height: 100px;
+      border: 0.5px solid rgba($color: #000000, $alpha: 0.2);
+      border-radius: 5px;
+      padding: 10px;
+      input {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        opacity: 0;
+        top: 0;
+        left: 0;
+      }
+      .upload-button-image {
+        background-image: url(../../common/images/upload.svg);
+        background-size: cover;
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+  .upload-image-preview {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    .image {
+      margin-bottom: 10px;
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
+  }
+  .username {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    .username-text {
+      font-size: 20px;
+      margin-right: 10px;
+    }
+    input {
+      padding: 0 4px;
+      flex: auto;
+      outline: none;
+      border: none;
+      border-bottom: 1px solid rgba($color: #000000, $alpha: 0.2);
+      font-size: 17px;
+      color: rgba($color: #000000, $alpha: 0.9);
+    }
+  }
+  .desc {
+    margin-top: 10px;
+    .desc-text {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    textarea {
+      width: 100%;
+      height: 400px;
+      padding: 8px;
+      box-sizing: border-box;
+      font-size: 17px;
+      color: rgba($color: #000000, $alpha: 0.9);
+    }
+  }
+  .editor-submit {
+    width: 100%;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    border-radius: 8px;
+    font-size: 17px;
+    border: 0.5px solid rgba($color: #000000, $alpha: 0.2);
+  }
+}

@@ -1,33 +1,38 @@
-.follow-button{
-    width: 100px;
-    height: 35px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: yellow;
-    &.loading{
-        background-color: #f7f7f7;
+.follow-button {
+  width: 100px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: yellow;
+  margin: 0 5px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  overflow: hidden;
+  margin-right: 20px;
+  &.loading {
+    background-color: #f7f7f7;
+  }
+  .follow-button-text {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .loading-icon {
+    width: 25px;
+    height: 25px;
+    background-image: url(../../common/images/loading.svg);
+    background-size: cover;
+    animation: load 2s linear infinite;
+  }
+  @keyframes load {
+    0% {
+      transform: rotate(0);
     }
-    .follow-button-text{
-        font-size: 14px;
-        font-weight: 500;
+    50% {
+      transform: rotate(180deg);
     }
-    .loading-icon {
-        width: 25px;
-        height: 25px;
-        background-image: url(../../common/images/loading.svg);
-        background-size: cover;
-        animation: load 2s linear infinite;
-      }
-      @keyframes load {
-        0% {
-          transform: rotate(0);
-        }
-        50% {
-          transform: rotate(180deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
-      }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 }

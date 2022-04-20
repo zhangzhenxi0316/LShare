@@ -2,16 +2,27 @@
   .follow-navbar {
     display: flex;
     width: 100%;
+    align-items: center;
+    .line{
+      color: rgba(0, 0, 0, .5);
+    }
     .following-list,
     .follower-list {
+      cursor: pointer;
       flex: 1;
       display: flex;
       justify-content: center;
       align-items: center;
       font-size: 15px;
       padding: 8px 0;
+      .center{
+        padding: 7px;
+        border-radius: 6px;
+      }
       &.active{
-          background-color: #f7f7f7;
+        .center{
+          background-color: yellow;
+        }
       }
     }
   }

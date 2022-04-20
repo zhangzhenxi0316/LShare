@@ -1,5 +1,59 @@
 .article-detail {
-    padding-bottom: 15px;
+  padding-bottom: 15px;
+  position: relative;
+  .toast {
+    z-index: 100;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    padding: 8px;
+    border-radius: 10px;
+    color: #fff;
+    padding: 15px;
+    font-size: 15px;
+    background-color: rgba($color: #000000, $alpha: 0.9);
+  }
+  .draw-container {
+    padding-top: 68px;
+    .draw-item {
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 40px;
+      font-size: 17px;
+      color: rgba($color: #000000, $alpha: 0.7);
+      border-bottom: 0.5px solid rgba($color: #000000, $alpha: 0.2);
+    }
+  }
+  .article-like {
+    width: 55px;
+    height: 45px;
+    position: fixed;
+    right: 0;
+    top: 180px;
+    left: 50%;
+    transform: translateX(185px);
+    z-index: 1000;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    padding-left: 5px;
+    border-radius: 8px 0 0 8px;
+    overflow: hidden;
+    .like-icon {
+      width: 40px;
+      height: 40px;
+      overflow: hidden;
+      background-color: #fff;
+      background-image: url(../../common/images/unlike.svg);
+      background-size: cover;
+      &.liked {
+        background-image: url(../../common/images/like.svg);
+      }
+    }
+  }
   .article-title-bar {
     position: fixed;
     z-index: 1000;
@@ -9,7 +63,8 @@
     height: 48px;
     padding: 0 10px;
     align-items: center;
-    border-bottom: .5px solid rgba($color: #000000, $alpha: 0.2);
+    max-width: 525px;
+    border-bottom: 0.5px solid rgba($color: #000000, $alpha: 0.2);
     .back-icon {
       width: 24px;
       height: 24px;
@@ -33,20 +88,21 @@
       font-weight: 500;
       flex: auto;
     }
-    .follow-btn{
-        width: 80px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: yellow;
-        border-radius: 8px;
-        font-size: 14px;
-        margin-right: 15px;
-        font-weight: 500;
-        border: .5px solid rgba($color: #000000, $alpha: 0.2);
+    .follow-btn {
+      width: 80px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: yellow;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-right: 15px;
+      font-weight: 500;
+      border: 0.5px solid rgba($color: #000000, $alpha: 0.2);
     }
     .article-more {
+      margin-right: 10px;
       width: 24px;
       height: 24px;
       background-image: url(../../common/images/more.svg);

@@ -1,16 +1,28 @@
 import { UserType } from "common/types/user";
+import FollowButton from "components/FollowButton/FollowButton";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./userItem.scss";
 
 const UserItem = (props: UserType) => {
-  const { avatarUrl, userName, description } = props;
+  const navigator = useNavigate();
+  const { avatarUrl, userName, description, _id } = props;
+  const handleGotoUser = (e: any) => {
+    e.stopPropagation();
+    navigator(`/user/${_id}`);
+  };
   return (
     <div className="user-item-container">
-      <img className="user-avatar" src={avatarUrl} />
+      <img
+        className="user-avatar"
+        src={avatarUrl}
+        onClick={(e: any) => handleGotoUser(e)}
+      />
       <div className="user-main">
         <div className="user-name">{userName}</div>
         <div className="user-description">{description}</div>
       </div>
+      <FollowButton toUid={_id}/>
     </div>
   );
 };

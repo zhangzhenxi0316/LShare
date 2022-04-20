@@ -1,19 +1,19 @@
 const express = require("express");
-const { UserModel, ArticleModel } = require("../db");
+const { UserModel, ArticleModel, ObjectId } = require("../db");
 const { isValidateId } = require("../util");
 const router = express.Router();
 var jwt = require("jsonwebtoken");
+const user = require("../db/user");
+const auth = require("../middleware/auth");
 
 let secrect = "qwert";
-router.post("/action", async (req, res) => {
+
+// 关注行为
+router.post("/action", auth, async (req, res) => {
   try {
     const { type = "follow", toUid = "" } = req.body;
     const userId =
       (req.cookies.jwt && jwt.verify(req.cookies.jwt, secrect).user_id) || "";
-    if (!userId) {
-      res.json({ code: 500, message: "没有登陆" });
-      return;
-    }
     if (!isValidateId(toUid)) {
       res.json({ code: 400, message: "目标用户不存在" });
       return;
@@ -24,11 +24,12 @@ router.post("/action", async (req, res) => {
     ]);
 
     if (type === "follow") {
-      selfUserInfo.followings.unshift(
-        ...selfUserInfo.followings,
-        toUserInfo._id
-      );
-      toUserInfo.followers.unshift(...selfUserInfo.followers, selfUserInfo._id);
+      if (!selfUserInfo.followings.includes(toUserInfo._id)) {
+        selfUserInfo.followings.unshift(ObjectId(toUserInfo._id));
+      }
+      if (!toUserInfo.followers.includes(selfUserInfo._id)) {
+        toUserInfo.followers.unshift(ObjectId(selfUserInfo._id));
+      }
       let a = UserModel.findByIdAndUpdate(userId, {
         $set: {
           followings: selfUserInfo.followings,
@@ -66,7 +67,6 @@ router.post("/action", async (req, res) => {
       });
       await Promise.all([a, b]);
     }
-    // await Promise.all([selfUserInfo.save(),toUserInfo.save()])
     res.send({
       code: 200,
       message: "success",
@@ -77,52 +77,111 @@ router.post("/action", async (req, res) => {
     res.send({ code: 400, message: `error: ${JSON.stringify(error)}` });
   }
 });
-
-router.get("/isFollow", async (req, res) => {
+// 判断是否关注
+router.get("/isFollow", auth, async (req, res) => {
   const { toUid } = req.query;
   const userId =
     (req.cookies.jwt && jwt.verify(req.cookies.jwt, secrect).user_id) || "";
-  if (!userId) {
-    res.json({ code: 400, message: "未登陆" });
-    return;
-  }
   const userInfo = await UserModel.findById(userId);
   const isFollow = userInfo.followings.includes(toUid);
   res.json({ code: 200, message: "查询成功", isFollow });
 });
-router.get("/test", async (req, res) => {
-  const userInfo = await UserModel.findById("625e975e945f8ea57cc6153c");
-  userInfo.followers = [];
-  userInfo.followings = [];
-  userInfo.save();
-  res.send("ok");
-});
-router.get("/getFollowings", async (req, res) => {
+// 获取关注列表
+router.get("/getFollowings", auth, async (req, res) => {
   const userId =
     (req.cookies.jwt && jwt.verify(req.cookies.jwt, secrect).user_id) || "";
-  if (!userId) {
-    res.json({ code: 500, message: "没有登陆" });
+  const userInfo = await UserModel.findById(userId)
+    .populate({ path: "followings" })
+    .exec();
+  if (!userInfo) {
+    res.json({ code: 400, message: "用户不存在" });
+    return;
   }
-  const userInfo = await UserModel.findById(userId);
-  const followingsPromise = [];
-  userInfo.followings.forEach((item) => {
-    followingsPromise.push(UserModel.findById(item));
-  });
-  let followings = await Promise.all(followingsPromise);
-  res.json({ code: 200, message: "查询成功", followings });
+  console.log();
+  res.json({ code: 200, message: "查询成功", followings: userInfo.followings });
 });
-router.get("/getFollowers", async (req, res) => {
-    const userId =
-      (req.cookies.jwt && jwt.verify(req.cookies.jwt, secrect).user_id) || "";
-    if (!userId) {
-      res.json({ code: 500, message: "没有登陆" });
-    }
-    const userInfo = await UserModel.findById(userId);
-    const followersPromise = [];
-    userInfo.followers.forEach((item) => {
-        followersPromise.push(UserModel.findById(item));
-    });
-    let followers = await Promise.all(followersPromise);
-    res.json({ code: 200, message: "查询成功", followers });
+
+// 粉丝列表
+router.get("/getFollowers", auth, async (req, res) => {
+  const userId =
+    (req.cookies.jwt && jwt.verify(req.cookies.jwt, secrect).user_id) || "";
+  const userInfo = await UserModel.findById(userId)
+    .populate({ path: "followers" })
+    .exec();
+  if (!userInfo) {
+    res.json({ code: 400, message: "用户不存在" });
+    return;
+  }
+  res.json({ code: 200, message: "查询成功", followers: userInfo.followers });
+});
+// 用户关注的人的文章推荐
+router.get("/getUserFollowArticle", auth, async (req, res) => {
+  const { skip = 0 } = req.query;
+  const limit = 10;
+  const userId =
+    (req.cookies.jwt && jwt.verify(req.cookies.jwt, secrect).user_id) || "";
+  const userInfo = await UserModel.findById(userId);
+  const PromiseArr = [];
+  userInfo.followers.forEach((item) => {
+    PromiseArr.push(
+      UserModel.findById(item)
+        .populate({ path: "posts", populate: { path: "author" } })
+        .exec()
+    );
   });
+  const users = await Promise.all(PromiseArr);
+  let skipReal = 0;
+  let data = [];
+  for (let i = 0; i < users.length; i++) {
+    if (data.length >= limit) break;
+    if (users[i].posts.length < skip) {
+      skipReal = users[i].posts.length;
+      continue;
+    }
+    const posts = users[i].posts;
+    for (let j = 0; j < posts.length; j++) {
+      data.push(posts[j]);
+      skipReal++;
+    }
+  }
+  res.send({ code: 200, message: "查询成功", articles: data });
+});
+
+// 用户点赞的文章
+router.get("/getUserLikeArticle", auth, async (req, res) => {
+  const { skip = 0 } = req.query;
+  const userId =
+    (req.cookies.jwt && jwt.verify(req.cookies.jwt, secrect).user_id) || "";
+  const userInfo = await UserModel.findById(userId)
+    .populate({
+      path: "isDiggArticles",
+      populate: { path: "author" },
+    })
+    .limit(10)
+    .skip(skip)
+    .exec();
+  if (!userInfo) {
+    res.json({ code: 400, message: "用户不存在" });
+    return;
+  }
+  res.json({ code: 200, message: "查询成功", data: userInfo.isDiggArticles });
+});
+
+router.get("/articleIsMine", auth, async (req, res) => {
+  const { article_id } = req.query;
+  const userId =
+    (req.cookies.jwt && jwt.verify(req.cookies.jwt, secrect).user_id) || "";
+  if (!isValidateId(article_id)) {
+    res.json({ code: 400, message: "article id不正确" });
+    res.end();
+  }
+  const articleInfo = await ArticleModel.findById(article_id);
+
+  if (String(articleInfo.author) === userId) {
+    res.json({ code: 200, message: "yes" });
+  } else {
+    res.json({ code: 400, message: "no" });
+  }
+});
+
 module.exports = router;

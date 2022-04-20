@@ -1,35 +1,66 @@
-.nav-bar{
-    height: 48px;
-    width: 100%;
+.nav-bar {
+  height: 48px;
+  width: 100%;
+  display: flex;
+  position: fixed;
+  top: 0;
+  background-color: #fff;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 15px;
+  max-width: 525px;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.2);
+  .logo-info {
     display: flex;
-    position: fixed;
-    top: 0;
-    background-color: #fff;
-    justify-content: space-between;
     align-items: center;
-    padding: 0 15px;
-    border-bottom: .5px solid rgba(0,0,0,.2);
-    .logo-info{
-        display: flex;
-        align-items: center;
-        height: 100%;
-        .logo-image{
-            width: 32px;
-            height: 32px;
-            background-image: url('../../common/images/logo.png');
-            background-size: cover;
-            border-radius: 4px;
-            margin-right: 8px;
-        }
-        .logo-title{
-            font-size: 13px;
-            font-weight: 500;
-        }
+    height: 100%;
+    .logo-image {
+      width: 32px;
+      height: 32px;
+      background-image: url("../../common/images/logo.png");
+      background-size: cover;
+      border-radius: 4px;
+      margin-right: 8px;
     }
-    .nav-more{
-        background-image: url(../../common/images/nav-more.svg);
-        background-size: cover;
-        width: 24px;
-        height: 24px;
+    .logo-title {
+      font-size: 13px;
+      font-weight: 500;
     }
+  }
+  .nav-more {
+    position: absolute;
+    right: 15px;
+    background-image: url(../../common/images/nav-more.svg);
+    background-size: cover;
+    width: 24px;
+    height: 24px;
+  }
+  .nav-container{
+      padding-top: 20px;
+  }
+  .drawer-item {
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    color: rgba(0, 0, 0, 0.7);
+    padding: 8px 8px;
+    height: 40px;
+    justify-content: center;
+  }
+  .logout {
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    color: rgba(0, 0, 0, 0.7);
+    padding: 8px 8px;
+    position: relative;
+    .logout-icon {
+      position: absolute;
+      right: 20px;
+      background-image: url(../../common//images/logout.svg);
+      background-size: cover;
+      width: 24px;
+      height: 24px;
+    }
+  }
 }

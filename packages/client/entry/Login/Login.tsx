@@ -1,4 +1,5 @@
 import axiosInstance from "common/axios";
+import Titlebar from "components/TitleBar/TitleBar";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -32,7 +33,6 @@ const Login = () => {
     if (loginRes.data.code === 200) {
       localStorage.setItem("user", JSON.stringify(loginRes.data.user));
       // 成功登陆back
-      // history.back();
       navigate("/home");
     } else {
       setPassword("");
@@ -42,12 +42,16 @@ const Login = () => {
       }, 2000);
     }
   };
+  const handleBack = ()=>{
+    navigate("/home");
+  }
   return (
     <div className="login-box">
-      <div className="login-titlebar">
-        <div className="back-icon"></div>
+      {/* <div className="login-titlebar">
+        <div className="back-icon" onClick={handleBack}></div>
         <div className="back-title">Create Account/Login</div>
-      </div>
+      </div> */}
+      <Titlebar title="Create Account/Login" onBack={handleBack}/>
       <div className="login-container">
         <div className="login-title">使用用户名密码登陆</div>
         <div className="login-username">

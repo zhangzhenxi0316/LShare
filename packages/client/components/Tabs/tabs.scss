@@ -6,6 +6,8 @@
   align-items: center;
   position: fixed;
   bottom: 0;
+  max-width: 525px;
+  margin: 0 auto;
   .tabs-item {
     flex: 1;
     display: flex;

@@ -21,12 +21,21 @@ const ArticleCard = (props: ArticleType) => {
   const handleClick = () => {
     navigator(`/article/${_id}`, { state: props });
   };
+  const handleGotoUser = (e: any) => {
+    console.log(111);
+    e.stopPropagation();
+    navigator(`/user/${author._id}`);
+  };
   return (
     <div className="article-card-container" onClick={handleClick}>
       <img className="article-thumb" src={cover}></img>
       <div className="article-content">{title}</div>
       <div className="article-author">
-        <img className="author-avatar" src={author.avatarUrl}></img>
+        <img
+          className="author-avatar"
+          src={author.avatarUrl}
+          onClick={(e: any) => handleGotoUser(e)}
+        ></img>
         <div className="author-name">{author.userName}</div>
         <div className="digg-container">
           <div className={cs("digg-icon", { digg: isDigg })}></div>

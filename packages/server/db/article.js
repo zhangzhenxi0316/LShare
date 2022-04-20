@@ -4,11 +4,10 @@ const schema = new Schema({
   title: String,
   content: String,
   addTime: Number,
-  authorId: {
+  author: {
     type: Schema.Types.ObjectId,
     ref: "User",
   },
   covers: [String],
-  author: Object
 });
 module.exports = mongoose.model("Article", schema);

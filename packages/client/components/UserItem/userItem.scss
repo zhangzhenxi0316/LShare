@@ -5,6 +5,7 @@
     padding: 0 15px;
     display: flex;
     align-items: center;
+    overflow: hidden;
     .user-avatar{
         width: 48px;
         height: 48px;
@@ -16,17 +17,18 @@
     }
     .user-main{
         flex: auto;
-        display: flex;
         flex-direction: column;
-
         height: 100%;
+        overflow: hidden;
         .user-name{
+            display: flex;
             font-size: 15px;
             font-weight: 500;
             margin-bottom: 6px;
         }
         .user-description{
-            line-height: 20px;
+            // flex:auto;
+            width: 100%;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;

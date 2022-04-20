@@ -5,13 +5,19 @@ const schema = new Schema({
   password: String,
   avatarUrl: String,
   description: String,
-  followers: [String],
-  followings: [String],
-  postIds:[{
+  followers: [{
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  }],
+  followings: [{
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  }],
+  posts:[{
     type: Schema.Types.ObjectId,
     ref: "Article",
   }],
-  isDiggArtcileId: [{
+  isDiggArticles: [{
     type: Schema.Types.ObjectId,
     ref: "Article",
   }],

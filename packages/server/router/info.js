@@ -3,10 +3,12 @@ const { UserModel, ArticleModel } = require("../db");
 const { isValidateId } = require("../util");
 const router = express.Router();
 var jwt = require("jsonwebtoken");
+const auth = require("../middleware/auth");
 
 let secrect = "qwert";
-router.get("/getUserInfo", async (req, res) => {
-  console.log(req.query);
+
+// 获取user信息
+router.get("/getUserInfo",auth, async (req, res) => {
   let userId = "";
   const { user_id = "", isSelf = 0 } = req.query;
   if (isSelf) {
@@ -15,27 +17,25 @@ router.get("/getUserInfo", async (req, res) => {
   } else {
     userId = user_id;
   }
-  console.log(userId);
   if (!isValidateId(userId)) {
     res.json({ code: 400, message: "用户不存在" });
     return;
   }
-  const user = await UserModel.findById(userId);
-  if (!user) {
-    res.json({ code: 400, message: "用户不存在" });
-  } else {
-    console.log(user);
-    let postsPromise = [];
-    user.postIds.forEach((id) => {
-      postsPromise.push(ArticleModel.findById(id));
-    });
-    const posts = await await Promise.all(postsPromise);
-    const assginObj = {
-      posts,
-    };
-    const userInfo = Object.assign(JSON.parse(JSON.stringify(user)), assginObj);
-    console.log(assginObj, userInfo);
+  console.log('userId',userId)
+  const userInfo = await UserModel.findById(userId)
+    .populate({
+      path: "posts",
+      populate: {
+        path: "author",
+      },
+    })
+    .exec();
+  console.log('userInfo',userInfo)
+
+  if (userInfo) {
     res.json({ code: 200, message: "查询成功", userInfo });
+  } else {
+    res.json({ code: 500, message: "没有此用户" });
   }
   return;
 });

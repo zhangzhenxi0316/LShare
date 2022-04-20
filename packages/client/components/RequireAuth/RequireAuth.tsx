@@ -5,7 +5,7 @@ import "./RequireAuth.scss";
 
 function RequireAuth({ children }: any) {
   const navigate = useNavigate();
-  const [isValidate, setIsValidate] = useState(true);
+  const [isValidate, setIsValidate] = useState(false);
   const loginIsValidate = async () => {
     const user_id = JSON.parse(localStorage.getItem("user") || "{}")._id;
     const res = await axiosInstance.get("/login/isValidate");
@@ -21,7 +21,6 @@ function RequireAuth({ children }: any) {
   useEffect(() => {
     loginIsValidate();
   }, []);
-  console.log(children);
   return isValidate ? ( // 判断 localstorage 中登录状态是否为 true
     children
   ) : (
