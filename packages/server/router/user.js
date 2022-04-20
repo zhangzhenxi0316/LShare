@@ -97,7 +97,7 @@ router.get("/getFollowings", auth, async (req, res) => {
     res.json({ code: 400, message: "用户不存在" });
     return;
   }
-  console.log();
+
   res.json({ code: 200, message: "查询成功", followings: userInfo.followings });
 });
 

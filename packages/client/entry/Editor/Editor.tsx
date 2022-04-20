@@ -18,8 +18,7 @@ const Editor = () => {
     e.preventDefault();
     let fileList = e.target.files;
     let file = fileList[0];
-    let localUrls = "";
-    let ImageUrls = "";
+
 
     const formData = new FormData();
     formData.append("file", file);
@@ -28,11 +27,9 @@ const Editor = () => {
     });
     const ImageUrl = uploadRes.data.url;
     const localUrl = URL.createObjectURL(file);
-    localUrls = localUrl;
-    ImageUrls = ImageUrl;
 
     setlocalImage(localUrl);
-    setavatarUrl(avatarUrl);
+    setavatarUrl(ImageUrl);
   };
   const userNameChange = (e: any) => {
     e.preventDefault();

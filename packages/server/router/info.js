@@ -21,7 +21,7 @@ router.get("/getUserInfo",auth, async (req, res) => {
     res.json({ code: 400, message: "用户不存在" });
     return;
   }
-  console.log('userId',userId)
+
   const userInfo = await UserModel.findById(userId)
     .populate({
       path: "posts",
@@ -30,7 +30,7 @@ router.get("/getUserInfo",auth, async (req, res) => {
       },
     })
     .exec();
-  console.log('userInfo',userInfo)
+
 
   if (userInfo) {
     res.json({ code: 200, message: "查询成功", userInfo });

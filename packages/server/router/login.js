@@ -16,7 +16,7 @@ function generateToken(id) {
 }
 // 登陆接口
 router.post("/login", async (req, res) => {
-  console.log("req.body", req.body);
+
   const { username, password } = req.body;
   const user = await UserModel.findOne({ userName: username });
   if (!user) {
@@ -53,10 +53,10 @@ router.post("/login", async (req, res) => {
 // 验证登陆是否失效
 router.get("/login/isValidate", async (req, res) => {
   try {
-    console.log(11222222);
+
     const user_id =
       req.cookies.jwt && jwt.verify(req.cookies.jwt, secrect).user_id;
-    console.log('---', user_id);
+
     if (user_id) {
       res.json({ code: 200, message: "ok", user_id });
       res.end();

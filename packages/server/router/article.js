@@ -124,7 +124,7 @@ router.post("/deletePost", auth, async (req, res) => {
   const userId =
     (req.cookies.jwt && jwt.verify(req.cookies.jwt, secrect).user_id) || "";
   const articleInfo = await ArticleModel.findById(article_id);
-  console.log(article_id)
+
   if (String(articleInfo.author) == userId) {
     await ArticleModel.findByIdAndDelete(article_id);
     res.json({ code: 200, message: "删除成功" });
