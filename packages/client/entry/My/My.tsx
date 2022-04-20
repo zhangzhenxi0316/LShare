@@ -1,70 +1,11 @@
+import axiosInstance from "common/axios";
+import { UserType } from "common/types/user";
 import Feed from "components/Feed/Feed";
 import React from "react";
+import { useState } from "react";
+import { useEffect } from "react";
 import "./my.scss";
-const test = [
-  [
-    {
-      title: "测试问哈那个大的风",
-      image: [
-        "https://p16.topbuzzcdn.com/img/tos-alisg-i-0000/ecd2c346b475478eabdf1fe6c48ee04a~0x640.image",
-      ],
-      content: "xxxxxxxxxxxxx",
-      diggCount: 1,
-      author: {
-        name: "zzx",
-        avatarUrl:
-          "https://p16.topbuzzcdn.com/thumb/user-avatar-alisg/7f6f52da535c76d7ca7c9811b79b6e50",
-        description: "xxx",
-      },
-      isDigg: false,
-    },
-    {
-      title: "测试问哈那个大的风",
-      image: [
-        "https://p16.topbuzzcdn.com/img/tos-alisg-i-0000/ecd2c346b475478eabdf1fe6c48ee04a~0x640.image",
-      ],
-      content: "xxxxxxxxxxxxx",
-      diggCount: 1,
-      author: {
-        name: "zzx",
-        avatarUrl:
-          "https://p16.topbuzzcdn.com/thumb/user-avatar-alisg/7f6f52da535c76d7ca7c9811b79b6e50",
-        description: "xxx",
-      },
-      isDigg: false,
-    },
-    {
-      title: "测试问哈那个大的风",
-      image: [
-        "https://p16.topbuzzcdn.com/img/tos-alisg-i-0000/ecd2c346b475478eabdf1fe6c48ee04a~0x640.image",
-      ],
-      content: "xxxxxxxxxxxxx",
-      diggCount: 1,
-      author: {
-        name: "zzx",
-        avatarUrl:
-          "https://p16.topbuzzcdn.com/thumb/user-avatar-alisg/7f6f52da535c76d7ca7c9811b79b6e50",
-        description: "xxx",
-      },
-      isDigg: false,
-    },
-    {
-      title: "测试问哈那个大的风",
-      image: [
-        "https://p16.topbuzzcdn.com/img/tos-alisg-i-0000/ecd2c346b475478eabdf1fe6c48ee04a~0x640.image",
-      ],
-      content: "xxxxxxxxxxxxx",
-      diggCount: 1,
-      author: {
-        name: "zzx",
-        avatarUrl:
-          "https://p16.topbuzzcdn.com/thumb/user-avatar-alisg/7f6f52da535c76d7ca7c9811b79b6e50",
-        description: "xxx",
-      },
-      isDigg: false,
-    },
-  ],
-];
+
 const userInfo = {
   name: "zzx",
   avatarUrl:
@@ -72,12 +13,24 @@ const userInfo = {
   description: "hi gus im girls",
 };
 const My = () => {
+  const [userInfo, setUserInfo] = useState<UserType>({} as UserType);
+  const getUserInfo = async () => {
+    const userInfoRes = await axiosInstance.get("/getUserInfo?isSelf=1");
+    if (userInfoRes.data.code === 200) {
+      console.log("userInfoRes.data", userInfoRes.data);
+      setUserInfo(userInfoRes.data.userInfo);
+    }
+  };
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+  console.log("userInfo.posts------", userInfo);
   return (
     <div className="my-container">
       <div className="top-area">
         <div className="user-info">
           <img className="user-avatar" src={userInfo.avatarUrl}></img>
-          <div className="user-name">{userInfo.name}</div>
+          <div className="user-name">{userInfo.userName}</div>
           <div className="user-desc">{userInfo.description}</div>
         </div>
       </div>
@@ -85,7 +38,11 @@ const My = () => {
         <div className="editor-user-info">Edit User Info </div>
       </div>
       <div className="user-post">
-        <Feed articleGroups={test} />
+        {userInfo.posts?.length == 0 ? (
+          <div className="empty-text">你还没有发文</div>
+        ) : (
+          <Feed articleGroups={[userInfo.posts || []]} />
+        )}
       </div>
     </div>
   );

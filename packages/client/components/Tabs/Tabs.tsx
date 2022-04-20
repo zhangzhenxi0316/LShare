@@ -28,11 +28,8 @@ const Tabs = () => {
     <div className="bottom-tabs">
       {tabs.map((item) => {
         return (
-          <div className="tabs-item">
-            <Link
-              to={item.link}
-              className="tabs-link"
-            >
+          <div className="tabs-item" key={item.name}>
+            <Link to={item.link} className="tabs-link">
               <div className={`icon tabs-item-${item.name}`}></div>
             </Link>
           </div>

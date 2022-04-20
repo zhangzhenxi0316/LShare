@@ -1,0 +1,25 @@
+.auth-loading {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .loading-icon {
+    width: 25px;
+    height: 25px;
+    background-image: url(../../common/images/loading.svg);
+    background-size: cover;
+    animation: load 2s linear infinite;
+  }
+  @keyframes load {
+    0% {
+      transform: rotate(0);
+    }
+    50% {
+      transform: rotate(180deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}

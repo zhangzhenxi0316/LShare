@@ -1,142 +1,57 @@
+import axiosInstance from "common/axios";
 import Feed from "components/Feed/Feed";
 import Wrapper from "components/Wrapper/Wrapper";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import "./home.scss";
-const test = [
-  [
-    {
-      title: "测试问哈那个大的风",
-      image: [
-        "https://p16.topbuzzcdn.com/img/tos-alisg-i-0000/ecd2c346b475478eabdf1fe6c48ee04a~0x640.image",
-      ],
-      content: "xxxxxxxxxxxxx",
-      diggCount: 1,
-      author: {
-        name: "zzx",
-        avatarUrl:
-          "https://p16.topbuzzcdn.com/thumb/user-avatar-alisg/7f6f52da535c76d7ca7c9811b79b6e50",
-        description: "xxx",
-      },
-      isDigg: false,
-    },
-    {
-      title: "测试问哈那个大的风",
-      image: [
-        "https://p16.topbuzzcdn.com/img/tos-alisg-i-0000/ecd2c346b475478eabdf1fe6c48ee04a~0x640.image",
-      ],
-      content: "xxxxxxxxxxxxx",
-      diggCount: 1,
-      author: {
-        name: "zzx",
-        avatarUrl:
-          "https://p16.topbuzzcdn.com/thumb/user-avatar-alisg/7f6f52da535c76d7ca7c9811b79b6e50",
-        description: "xxx",
-      },
-      isDigg: false,
-    },
-    {
-      title: "测试问哈那个大的风",
-      image: [
-        "https://p16.topbuzzcdn.com/img/tos-alisg-i-0000/ecd2c346b475478eabdf1fe6c48ee04a~0x640.image",
-      ],
-      content: "xxxxxxxxxxxxx",
-      diggCount: 1,
-      author: {
-        name: "zzx",
-        avatarUrl:
-          "https://p16.topbuzzcdn.com/thumb/user-avatar-alisg/7f6f52da535c76d7ca7c9811b79b6e50",
-        description: "xxx",
-      },
-      isDigg: false,
-    },
-    {
-      title: "测试问哈那个大的风",
-      image: [
-        "https://p16.topbuzzcdn.com/img/tos-alisg-i-0000/ecd2c346b475478eabdf1fe6c48ee04a~0x640.image",
-      ],
-      content: "xxxxxxxxxxxxx",
-      diggCount: 1,
-      author: {
-        name: "zzx",
-        avatarUrl:
-          "https://p16.topbuzzcdn.com/thumb/user-avatar-alisg/7f6f52da535c76d7ca7c9811b79b6e50",
-        description: "xxx",
-      },
-      isDigg: false,
-    },
-  ],
-  [
-    {
-      title: "测试问哈那个大的风",
-      image: [
-        "https://p16.topbuzzcdn.com/img/tos-alisg-i-0000/ecd2c346b475478eabdf1fe6c48ee04a~0x640.image",
-      ],
-      content: "xxxxxxxxxxxxx",
-      diggCount: 1,
-      author: {
-        name: "zzx",
-        avatarUrl:
-          "https://p16.topbuzzcdn.com/thumb/user-avatar-alisg/7f6f52da535c76d7ca7c9811b79b6e50",
-        description: "xxx",
-      },
-      isDigg: false,
-    },
-    {
-      title: "测试问哈那个大的风",
-      image: [
-        "https://p16.topbuzzcdn.com/img/tos-alisg-i-0000/ecd2c346b475478eabdf1fe6c48ee04a~0x640.image",
-      ],
-      content: "xxxxxxxxxxxxx",
-      diggCount: 1,
-      author: {
-        name: "zzx",
-        avatarUrl:
-          "https://p16.topbuzzcdn.com/thumb/user-avatar-alisg/7f6f52da535c76d7ca7c9811b79b6e50",
-        description: "xxx",
-      },
-      isDigg: false,
-    },
-    {
-      title: "测试问哈那个大的风",
-      image: [
-        "https://p16.topbuzzcdn.com/img/tos-alisg-i-0000/ecd2c346b475478eabdf1fe6c48ee04a~0x640.image",
-      ],
-      content: "xxxxxxxxxxxxx",
-      diggCount: 1,
-      author: {
-        name: "zzx",
-        avatarUrl:
-          "https://p16.topbuzzcdn.com/thumb/user-avatar-alisg/7f6f52da535c76d7ca7c9811b79b6e50",
-        description: "xxx",
-      },
-      isDigg: false,
-    },
-    {
-      title: "测试问哈那个大的风",
-      image: [
-        "https://p16.topbuzzcdn.com/img/tos-alisg-i-0000/ecd2c346b475478eabdf1fe6c48ee04a~0x640.image",
-      ],
-      content: "xxxxxxxxxxxxx",
-      diggCount: 1,
-      author: {
-        name: "zzx",
-        avatarUrl:
-          "https://p16.topbuzzcdn.com/thumb/user-avatar-alisg/7f6f52da535c76d7ca7c9811b79b6e50",
-        description: "xxx",
-      },
-      isDigg: false,
-    },
-  ],
-];
+const test: any = [];
 const Home = () => {
+  const [feedData, setFeedData] = useState<any>([[]]);
+  const [hasMore, setHasMore] = useState(true);
+  const [skipNumber, setSkipNumber] = useState(0);
+  const ref = useRef<any>();
+  const getFeed = async (skip: number) => {
+    const data = await axiosInstance.get(`/getFeed?skip=${skip}`);
+    console.log("data---", data.data);
+    // data.data.articles.length > 0 &&
+    setFeedData([...feedData, data.data.articles]);
+    setHasMore(data.data.has_more);
+    setSkipNumber(skipNumber + data.data.articles.length);
+  };
   useEffect(() => {
     const element = document.querySelector(".container");
     element?.scrollTo({ top: 0 });
+    getFeed(skipNumber);
   }, []);
+  useEffect(() => {
+    let isLoading = false;
+    const scrollFunc = async () => {
+      if (ref?.current) {
+        const bottom =
+          window.innerHeight -
+          (ref.current.offsetTop - window.pageYOffset) -
+          ref.current.offsetHeight;
+        if (bottom > 0 && !isLoading && hasMore) {
+          isLoading = true;
+          await getFeed(skipNumber);
+        }
+      }
+    };
+    window.addEventListener("scroll", scrollFunc);
+    return () => {
+      window.removeEventListener("scroll", scrollFunc);
+    };
+  }, [feedData, hasMore]);
+  console.log("hasMore", hasMore);
   return (
-    <div>
-      <Feed articleGroups={test} />
+    <div className="feed-box" ref={ref}>
+      <Feed articleGroups={feedData} />
+
+      <div className="loading-contianer">
+        {hasMore ? <div className="loading-icon"></div>
+        : <div className="end-text">end</div>
+        }
+      </div>
     </div>
   );
 };

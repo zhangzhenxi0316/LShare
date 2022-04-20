@@ -1,0 +1,18 @@
+.follow-list {
+  .follow-navbar {
+    display: flex;
+    width: 100%;
+    .following-list,
+    .follower-list {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 15px;
+      padding: 8px 0;
+      &.active{
+          background-color: #f7f7f7;
+      }
+    }
+  }
+}

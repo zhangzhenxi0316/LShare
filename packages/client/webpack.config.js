@@ -17,6 +17,9 @@ module.exports = merge(webpackCommonConfig, {
   entry: {
     main: "./index.tsx",
   },
+  output:{
+    publicPath: '/'
+  },
   module: {
     rules: [
       //    image
@@ -94,6 +97,7 @@ module.exports = merge(webpackCommonConfig, {
           progress: true,
         },
         historyApiFallback: true,
+        
       }
     : {},
   resolve: {

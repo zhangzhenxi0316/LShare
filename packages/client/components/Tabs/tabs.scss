@@ -4,6 +4,8 @@
   background-color: #fcf9f9;
   display: flex;
   align-items: center;
+  position: fixed;
+  bottom: 0;
   .tabs-item {
     flex: 1;
     display: flex;

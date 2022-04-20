@@ -1,8 +1,12 @@
+import { ArticleType } from "./article";
+
 export type UserType = {
-    userId?: string;
-    name: string;
+    _id: string;
+    userName: string;
     avatarUrl: string;
     description: string;
-    followings?: Array<string>
-    followers?: Array<string>
+    followings: Array<string>;
+    followers: Array<string>;
+    postIds: Array<string>;
+    posts:Array<ArticleType>
 }

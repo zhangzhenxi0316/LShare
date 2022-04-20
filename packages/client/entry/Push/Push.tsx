@@ -4,6 +4,7 @@ import axiosInstance from "common/axios";
 import { ArticleType } from "common/types/article";
 const Push = () => {
   const [localImageUrls, setLocalImageurls] = useState<any>([]);
+  const [message, setMessage] = useState("");
   const [articleImageUrls, setArticleImageUrls] = useState<any>([]);
   const [title, setTitle] = useState("");
   const [articleContent, setArticleContent] = useState("");
@@ -38,6 +39,42 @@ const Push = () => {
     e.preventDefault();
     setArticleContent(e.target.value);
   };
+  const toast = (text: string) => {
+    setMessage(text);
+    setTimeout(() => {
+      setMessage("");
+    }, 1000);
+  };
+  const handlePublish = async () => {
+    console.log("1111111", title, articleContent, articleImageUrls);
+    if (
+      title === "" ||
+      articleContent === "" ||
+      articleImageUrls.length === 0
+    ) {
+      toast("标题或者正文或者封面不能为空");
+      return;
+    }
+
+    const publishRes = await axiosInstance.post(
+      "/upload/publish",
+      {
+        covers: articleImageUrls,
+        title,
+        content: articleContent,
+      }
+    );
+    console.log("publishRes", publishRes);
+    if (publishRes.data.code !== 200) {
+      toast(`发文失败 原因: ${publishRes.data.message}`);
+    } else {
+      toast("发文成功");
+      setArticleContent("");
+      setArticleImageUrls([]);
+      setLocalImageurls([]);
+      setTitle("");
+    }
+  };
   return (
     <div className="push-container">
       <div className="upload-image-preview">
@@ -58,13 +95,25 @@ const Push = () => {
       </div>
       <div className="article-title">
         <div className="article-title-text">标题: </div>
-        <input type="text" placeholder="请输入标题" onChange={titleChange} />
+        <input
+          type="text"
+          placeholder="请输入标题"
+          onChange={titleChange}
+          value={title}
+        />
       </div>
       <div className="article-content">
         <div className="article-content-text">正文:</div>
-        <textarea placeholder="请输入正文" onChange={contentChange} />
+        <textarea
+          placeholder="请输入正文"
+          onChange={contentChange}
+          value={articleContent}
+        />
       </div>
-      <div className="article-submit">提交</div>
+      <div className="article-submit" onClick={handlePublish}>
+        提交
+      </div>
+      {Boolean(message) && <div className="publish-toast">{message}</div>}
     </div>
   );
 };
