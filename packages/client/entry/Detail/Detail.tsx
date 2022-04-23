@@ -40,6 +40,13 @@ const Detail = (props: any) => {
       setComments(articleRes.data.article.comments);
       setIsLoading(false);
     }
+    if (articleRes.data.code === 404) {
+      setToast("文章被封禁");
+      setTimeout(() => {
+        setToast("");
+        history.back();
+      }, 1000);
+    }
   };
   const getIsMine = async () => {
     const res = await axiosInstance.get(`/articleIsMine?article_id=${id}`);

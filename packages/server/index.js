@@ -3,6 +3,7 @@ const uploadRouter = require("./router/upload");
 const loginRouter = require("./router/login");
 const articleRouter = require("./router/article");
 const userRouter = require("./router/user");
+const adminRouter = require("./router/admin");
 const infoRouter = require("./router/info");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -15,14 +16,17 @@ mongoose
     (res) => {
       console.log("connect success");
     },
-    (err) => console.log("connection failed",err)
+    (err) => console.log("connection failed", err)
   );
 
 const app = express();
 
 //设置跨域访问
 app.all("*", function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:9102");
+  const config = ["http://localhost:9102", "http://localhost:2022"];
+  if (config.indexOf(req.headers.origin) >= 0) {
+    res.header("Access-Control-Allow-Origin", req.headers.origin);
+  }
   res.header("Access-Control-Allow-Headers", "Content-Type");
   res.header("Access-Control-Allow-Methods", "*");
   res.header("Access-Control-Allow-Credentials", true);
@@ -35,11 +39,12 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(loginRouter)
-app.use(infoRouter)
-app.use(articleRouter)
-app.use(userRouter)
+app.use(loginRouter);
+app.use(infoRouter);
+app.use(articleRouter);
+app.use(userRouter);
 app.use("/upload", uploadRouter);
+app.use("/admin", adminRouter);
 app.listen(3000, () => {
   console.log("server start success 3000 port");
 });

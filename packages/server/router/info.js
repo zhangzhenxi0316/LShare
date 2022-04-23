@@ -8,15 +8,19 @@ const auth = require("../middleware/auth");
 let secrect = "qwert";
 
 // 获取user信息
-router.get("/getUserInfo", auth, async (req, res) => {
+router.get("/getUserInfo", async (req, res) => {
   let userId = "";
   const { user_id = "", isSelf = 0 } = req.query;
   if (isSelf) {
     userId =
       (req.cookies.jwt && jwt.verify(req.cookies.jwt, secrect).user_id) || "";
+    if (!userId) {
+      res.json({ code: 500, message: "登陆过期" });
+    }
   } else {
     userId = user_id;
   }
+
   if (!isValidateId(userId)) {
     res.json({ code: 400, message: "用户不存在" });
     return;

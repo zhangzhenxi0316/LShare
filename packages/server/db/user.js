@@ -6,6 +6,10 @@ const schema = new Schema({
   password: String,
   avatarUrl: String,
   description: String,
+  ban: {
+    type: Boolean,
+    default: false,
+  },
   followers: [
     {
       type: Schema.Types.ObjectId,

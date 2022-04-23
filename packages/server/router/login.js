@@ -14,6 +14,8 @@ function generateToken(id) {
     secrect
   );
 }
+// admin登陆接口
+
 // 登陆接口
 router.post("/login", async (req, res) => {
 

@@ -11,5 +11,9 @@ const schema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Article",
   },
+  ban: {
+    type: Boolean,
+    default: false,
+  },
 });
 module.exports = mongoose.model("Comment", schema);

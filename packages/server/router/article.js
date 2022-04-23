@@ -16,13 +16,12 @@ router.get("/getFeed", async (req, res) => {
     if (userId) {
       userInfo = await UserModel.findById(userId);
     }
-    let articles = await ArticleModel.find()
+    let articles = await ArticleModel.find({ ban: false })
       .populate("author", { password: 0, userName: 0 })
       .sort({ _id: -1 })
       .limit(10)
       .skip(skip)
       .exec();
-
     for (let i = 0; i < articles.length; i++) {
       const isDigg = userInfo
         ? userInfo.isDiggArticles.includes(articles[i]._id)
@@ -57,12 +56,20 @@ router.get("/getArticleInfo", async (req, res) => {
   }
   const article = await ArticleModel.findById(article_id)
     .populate("author", { password: 0, userName: 0 })
-    .populate({ path: "comments", populate: { path: "user" } })
+    .populate({
+      path: "comments",
+      match: { ban: false },
+      populate: { path: "user" },
+    })
     .exec();
 
   const isDigg = userInfo
     ? userInfo.isDiggArticles.includes(article_id)
     : false;
+  if (article.ban) {
+    res.json({ code: 404, message: "文章被封禁了" });
+    return;
+  }
   if (article) {
     res.json({
       code: 200,
@@ -142,7 +149,10 @@ router.post("/comment", auth, async (req, res) => {
     const addTime = Date.now();
     const userId =
       (req.cookies.jwt && jwt.verify(req.cookies.jwt, secrect).user_id) || "";
-    const [articleInfo,userInfo] = await Promise.all([ArticleModel.findById(article_id),UserModel.findById(userId)]);
+    const [articleInfo, userInfo] = await Promise.all([
+      ArticleModel.findById(article_id),
+      UserModel.findById(userId),
+    ]);
     const commentService = CommentModel({
       _id,
       user: ObjectId(userId),
@@ -159,11 +169,11 @@ router.post("/comment", auth, async (req, res) => {
           comments: articleInfo.comments,
         },
       }).exec(),
-      UserModel.findByIdAndUpdate(userId,{
-        $set:{
+      UserModel.findByIdAndUpdate(userId, {
+        $set: {
           comments: userInfo.comments,
-        }
-      })
+        },
+      }),
     ]);
     const commentInfo = await CommentModel.findById(_commentInfo._id).populate(
       "user",
@@ -174,9 +184,5 @@ router.post("/comment", auth, async (req, res) => {
     console.log(error);
     res.json({ code: 400, message: `error：${JSON.stringify(error)}` });
   }
-});
-router.get("/test", async (req, res) => {
-  await ArticleModel.find().update({ $set: { comments: [] } });
-  res.json("ok");
 });
 module.exports = router;
