@@ -42,6 +42,9 @@
     justify-content: center;
   }
   .toast {
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
     position: fixed;
     background-color: rgba($color: #000000, $alpha: 0.8);
     color: #fff;

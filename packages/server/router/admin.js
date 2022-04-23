@@ -58,9 +58,17 @@ router.post("/article_ban", adminAuth, async (req, res) => {
     article: ObjectId(article_id),
     user: ObjectId(article.author),
   });
-  const [log, _] = await Promise.all([
+  const [log, _, $] = await Promise.all([
     _log.save(),
     ArticleModel.findByIdAndUpdate(article_id, { $set: { ban } }),
+    AdminModel.findByIdAndUpdate(userId, {
+      $push: {
+        logs: {
+          $each: [_id],
+          $position: 0,
+        },
+      },
+    }),
   ]);
   res.json({ code: 200, message: "操作成功", log, ban });
 });
@@ -79,9 +87,17 @@ router.post("/comment_ban", adminAuth, async (req, res) => {
     article: ObjectId(article._id),
     user: ObjectId(article.author),
   });
-  const [log, _] = await Promise.all([
+  const [log, _, $] = await Promise.all([
     _log.save(),
     CommentModel.findByIdAndUpdate(comment_id, { $set: { ban } }),
+    AdminModel.findByIdAndUpdate(adminId, {
+      $push: {
+        logs: {
+          $each: [_id],
+          $position: 0,
+        },
+      },
+    }),
   ]);
   res.json({ code: 200, message: "操作成功", log, ban });
 });
@@ -98,9 +114,17 @@ router.post("/user_ban", adminAuth, async (req, res) => {
     time: Date.now(),
     user: ObjectId(userId),
   });
-  const [log, $] = await Promise.all([
+  const [log, $, _] = await Promise.all([
     _log.save(),
     UserModel.findByIdAndUpdate(userId, { $set: { ban } }),
+    AdminModel.findByIdAndUpdate(adminId, {
+      $push: {
+        logs: {
+          $each: [_id],
+          $position: 0,
+        },
+      },
+    }),
   ]);
   res.json({ code: 200, message: "ok", ban, log });
 });
@@ -129,8 +153,18 @@ router.get("/getArticleInfo", adminAuth, async (req, res) => {
     res.json({ code: 400, message: "文章不存在" });
   }
 });
+
 router.get("/getLog", adminAuth, async (req, res) => {
-  const log = await LogModel.find().populate("operator",{password:0});
+  const adminId =
+    (req.cookies.admin && jwt.verify(req.cookies.admin, secrect).user_id) || "";
+  const log = await AdminModel.findById(adminId, {
+    _id: 0,
+    password: 0,
+  }).populate("logs", {
+    _id: 0,
+    __v: 0,
+  });
+  console.log(log);
   res.json({ code: 200, message: "ok", log });
 });
 module.exports = router;
