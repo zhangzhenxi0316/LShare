@@ -4,4 +4,5 @@ const {
 } = mongoose;
 const UserModel = require("./user");
 const ArticleModel = require("./Article");
-module.exports = { ObjectId, UserModel, ArticleModel };
+const CommentModel = require("./Comment");
+module.exports = { ObjectId, UserModel, ArticleModel, CommentModel };

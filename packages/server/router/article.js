@@ -1,42 +1,44 @@
 const express = require("express");
-const { UserModel, ArticleModel, ObjectId } = require("../db");
+const { UserModel, ArticleModel, ObjectId, CommentModel } = require("../db");
 const { isValidateId } = require("../util");
 const router = express.Router();
 var jwt = require("jsonwebtoken");
 let secrect = "qwert";
 const auth = require("../middleware/auth");
 
-const getAuthorInfo = (user_id) => {
-  return UserModel.findById(user_id);
-};
 // feed 消费流
 router.get("/getFeed", async (req, res) => {
-  const { skip = 0 } = req.query;
-  const userId =
-    (req.cookies.jwt && jwt.verify(req.cookies.jwt, secrect).user_id) || "";
-  let userInfo = null;
-  if (userId) {
-    userInfo = await UserModel.findById(userId);
-  }
-  let articles = await ArticleModel.find()
-    .populate({ path: "author" })
-    .sort({ _id: -1 })
-    .limit(10)
-    .skip(skip)
-    .exec();
+  try {
+    const { skip = 0 } = req.query;
+    const userId =
+      (req.cookies.jwt && jwt.verify(req.cookies.jwt, secrect).user_id) || "";
+    let userInfo = null;
+    if (userId) {
+      userInfo = await UserModel.findById(userId);
+    }
+    let articles = await ArticleModel.find()
+      .populate("author", { password: 0, userName: 0 })
+      .sort({ _id: -1 })
+      .limit(10)
+      .skip(skip)
+      .exec();
 
-  for (let i = 0; i < articles.length; i++) {
-    const isDigg = userInfo
-      ? userInfo.isDiggArticles.includes(articles[i]._id)
-      : false;
-    articles[i] = Object.assign(JSON.parse(JSON.stringify(articles[i])), {
-      isDigg,
-    });
-  }
-  if (articles.length < 10) {
-    res.json({ code: 200, articles, has_more: false });
-  } else {
-    res.json({ code: 200, articles, has_more: true });
+    for (let i = 0; i < articles.length; i++) {
+      const isDigg = userInfo
+        ? userInfo.isDiggArticles.includes(articles[i]._id)
+        : false;
+      articles[i] = Object.assign(JSON.parse(JSON.stringify(articles[i])), {
+        isDigg,
+      });
+    }
+    if (articles.length < 10) {
+      res.json({ code: 200, articles, has_more: false });
+    } else {
+      res.json({ code: 200, articles, has_more: true });
+    }
+  } catch (error) {
+    console.log(error);
+    res.json({ code: 400, message: "error" });
   }
 });
 
@@ -54,7 +56,8 @@ router.get("/getArticleInfo", async (req, res) => {
     userInfo = await UserModel.findById(userId);
   }
   const article = await ArticleModel.findById(article_id)
-    .populate({ path: "author" })
+    .populate("author", { password: 0, userName: 0 })
+    .populate({ path: "comments", populate: { path: "user" } })
     .exec();
 
   const isDigg = userInfo
@@ -132,5 +135,48 @@ router.post("/deletePost", auth, async (req, res) => {
     res.json({ code: 400, message: "你不是当前文章的作者不可以删除" });
   }
 });
-
+router.post("/comment", auth, async (req, res) => {
+  try {
+    const { article_id, content } = req.body;
+    const _id = new ObjectId();
+    const addTime = Date.now();
+    const userId =
+      (req.cookies.jwt && jwt.verify(req.cookies.jwt, secrect).user_id) || "";
+    const [articleInfo,userInfo] = await Promise.all([ArticleModel.findById(article_id),UserModel.findById(userId)]);
+    const commentService = CommentModel({
+      _id,
+      user: ObjectId(userId),
+      content,
+      addTime,
+      article: ObjectId(article_id),
+    });
+    articleInfo.comments.unshift(_id);
+    userInfo.comments.unshift(_id);
+    const [_commentInfo, _] = await Promise.all([
+      commentService.save(),
+      ArticleModel.findByIdAndUpdate(article_id, {
+        $set: {
+          comments: articleInfo.comments,
+        },
+      }).exec(),
+      UserModel.findByIdAndUpdate(userId,{
+        $set:{
+          comments: userInfo.comments,
+        }
+      })
+    ]);
+    const commentInfo = await CommentModel.findById(_commentInfo._id).populate(
+      "user",
+      { password: 0, userName: 0 }
+    );
+    res.json({ code: 200, message: "评论发布成功", comment: commentInfo });
+  } catch (error) {
+    console.log(error);
+    res.json({ code: 400, message: `error：${JSON.stringify(error)}` });
+  }
+});
+router.get("/test", async (req, res) => {
+  await ArticleModel.find().update({ $set: { comments: [] } });
+  res.json("ok");
+});
 module.exports = router;

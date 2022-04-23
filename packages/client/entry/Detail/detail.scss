@@ -163,3 +163,79 @@
     }
   }
 }
+.comment-input-container {
+  position: fixed;
+  bottom: 0;
+  height: 48px;
+  display: flex;
+  padding: 8px 10px;
+  align-items: center;
+  width: 100%;
+  max-width: 525px;
+  margin: 0 auto;
+  border-radius: 5px 5px 0 0;
+  border-top: 0.5px solid rgba($color: #000000, $alpha: 0.2);
+  background-color: #fff;
+  overflow: hidden;
+  padding-right: 50px;
+  .input {
+    display: flex;
+    align-items: center;
+    padding: 4px 8px;
+    box-sizing: border-box;
+    background-color: #f7f7f7;
+    border-radius: 10px;
+    // height: 35px;
+    flex: auto;
+
+    input {
+      flex: auto;
+      height: 30px;
+      padding: 0;
+      margin: 0;
+      background-color: transparent;
+      border: 0;
+      border-bottom: 0.5px solid rgba($color: #000000, $alpha: 0.2);
+      outline: none;
+      margin-right: 10px;
+    }
+  }
+  .submit-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 35px;
+    width: 80px;
+    border-radius: 5px;
+    background-color: yellow;
+    font-size: 16px;
+    margin-left: 15px;
+  }
+  .like-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    width: 24px;
+    height: 24px;
+    transform: translateY(-50%);
+    background-size: cover;
+    background-image: url(../../common/images/unlike.svg);
+
+    &.liked {
+      background-image: url(../../common/images/like.svg);
+    }
+  }
+}
+.comments-list-container {
+  padding: 10px;
+  .comment-title {
+    font-size: 18px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    height: 30px;
+  }
+  .comment-list{
+    padding-bottom: 48px;
+  }
+}

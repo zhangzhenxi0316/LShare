@@ -10,6 +10,8 @@ import { useEffect } from "react";
 import axiosInstance from "common/axios";
 import FollowButton from "components/FollowButton/FollowButton";
 import "./detail.scss";
+import CommmentItem from "components/CommentItem/CommentItem";
+import { CommentItemType } from "common/types/comment";
 const Detail = (props: any) => {
   // const location = useLocation();
   const navigator = useNavigate();
@@ -20,6 +22,10 @@ const Detail = (props: any) => {
   };
   const { id } = useParams();
   const [isMine, setIsMine] = useState(false);
+  const [inputComment, setInputComment] = useState("");
+  const [comments, setComments] = useState<Array<CommentItemType>>(
+    [] as Array<CommentItemType>
+  );
   const [article, setArticle] = useState<ArticleType>({} as ArticleType);
   const [liked, setLiked] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -31,6 +37,7 @@ const Detail = (props: any) => {
     if (articleRes.data.code === 200) {
       setArticle(articleRes.data.article);
       setLiked(articleRes.data.article.isDigg);
+      setComments(articleRes.data.article.comments);
       setIsLoading(false);
     }
   };
@@ -79,6 +86,28 @@ const Detail = (props: any) => {
       setToast("");
     }, 1000);
   };
+  const handleComment = (e: any) => {
+    e.preventDefault();
+    setInputComment(e.target.value);
+  };
+  const handleSubmit = async () => {
+    if (inputComment == "") return;
+    const res = await axiosInstance.post("/comment", {
+      article_id: article._id,
+      content: inputComment,
+    });
+    if (res.data.code === 500) {
+      navigator("/login");
+    }
+    if (res.data.code === 200) {
+      setComments([res.data.comment, ...comments]);
+      setInputComment("");
+      setToast("评论发送成功");
+      setTimeout(() => {
+        setToast("");
+      }, 1000);
+    }
+  };
   const renderContent = () => {
     return (
       <div className="article-detail">
@@ -108,7 +137,7 @@ const Detail = (props: any) => {
             src={article.author.avatarUrl}
             onClick={handleGotoUser}
           ></img>
-          <div className="article-author-name">{article.author.userName}</div>
+          <div className="article-author-name">{article.author.nickName}</div>
           <FollowButton toUid={article.author._id} />
           <div className="article-more" onClick={toggleDrawer}></div>
         </div>
@@ -122,6 +151,32 @@ const Detail = (props: any) => {
         <div className="article-main">
           <div className="article-title">{article.title}</div>
           <pre className="article-content">{article.content}</pre>
+        </div>
+        <div className="comments-list-container">
+          <div className="comment-title">评论列表</div>
+          <div className="comment-list">
+            {comments?.map((item) => {
+              return <CommmentItem key={item._id} {...item} />;
+            })}
+          </div>
+        </div>
+        <div className="comment-input-container">
+          <div className="input">
+            <input
+              className="comment"
+              onChange={(e) => {
+                handleComment(e);
+              }}
+              value={inputComment}
+            />
+          </div>
+          <div className="submit-button" onClick={handleSubmit}>
+            发送
+          </div>
+          <div
+            className={cs("like-icon", { liked })}
+            onClick={handleLike}
+          ></div>
         </div>
       </div>
     );

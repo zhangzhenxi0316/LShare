@@ -42,6 +42,7 @@ importers:
       babel-loader: ^8.2.4
       classnames: ^2.3.1
       css-loader: ^6.7.1
+      dayjs: ^1.11.1
       es6-promise: ^4.2.8
       html-webpack-plugin: ^5.5.0
       md5: ^2.3.0
@@ -67,6 +68,7 @@ importers:
       '@types/react-dom': 18.0.1
       axios: 0.26.1
       classnames: 2.3.1
+      dayjs: 1.11.1
       es6-promise: 4.2.8
       md5: 2.3.0
       react: 18.0.0
@@ -2579,6 +2581,10 @@ packages:
 
   /cuint/0.2.2:
     resolution: {integrity: sha1-QICG1AlVDCYxFVYZ6fp7ytw7mRs=}
+    dev: false
+
+  /dayjs/1.11.1:
+    resolution: {integrity: sha512-ER7EjqVAMkRRsxNCC5YqJ9d9VQYuWdGt7aiH2qA5R5wt8ZmWaP2dLUSIK6y/kVzLMlmh1Tvu5xUf4M/wdGJ5KA==}
     dev: false
 
   /debug/2.6.9:

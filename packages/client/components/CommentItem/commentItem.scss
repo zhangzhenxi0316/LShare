@@ -1,0 +1,30 @@
+.comment-item {
+  display: flex;
+  align-items: flex-start;
+//   height: 55px;
+padding: 8px 0 ;
+  .avatar,
+  img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 10px;
+    border: 0;
+    flex-shrink: 0;
+  }
+  .comment-content {
+    flex: auto;
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.8);
+    margin-right: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    word-break:break-all;
+  }
+  .time {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.7);
+    flex-shrink: 0;
+  }
+}

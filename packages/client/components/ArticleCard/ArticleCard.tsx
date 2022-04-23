@@ -36,7 +36,7 @@ const ArticleCard = (props: ArticleType) => {
           src={author.avatarUrl}
           onClick={(e: any) => handleGotoUser(e)}
         ></img>
-        <div className="author-name">{author.userName}</div>
+        <div className="author-name">{author.nickName}</div>
         <div className="digg-container">
           <div className={cs("digg-icon", { digg: isDigg })}></div>
           <div className="digg-count">{diggCount}</div>

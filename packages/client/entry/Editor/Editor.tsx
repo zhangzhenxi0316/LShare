@@ -11,7 +11,7 @@ const Editor = () => {
   const [message, setMessage] = useState("");
   const [localImage, setlocalImage] = useState<any>(userInfo.avatarUrl);
   const [avatarUrl, setavatarUrl] = useState<any>(userInfo.avatarUrl);
-  const [userName, setUserName] = useState(userInfo.userName);
+  const [nickName, setNickName] = useState(userInfo.nickName);
   const [desc, setDesc] = useState(userInfo.description);
 
   const onImageChange = async (e: any) => {
@@ -33,7 +33,7 @@ const Editor = () => {
   };
   const userNameChange = (e: any) => {
     e.preventDefault();
-    setUserName(e.target.value);
+    setNickName(e.target.value);
   };
   const descChange = (e: any) => {
     e.preventDefault();
@@ -50,7 +50,7 @@ const Editor = () => {
   const handlePublish = async () => {
     const publishRes = await axiosInstance.post("/upload/editorUser", {
       avatarUrl,
-      userName,
+      nickName,
       description: desc,
     });
 
@@ -90,7 +90,7 @@ const Editor = () => {
           type="text"
           placeholder="编辑UserName"
           onChange={userNameChange}
-          value={userName}
+          value={nickName}
         />
       </div>
       <div className="desc">

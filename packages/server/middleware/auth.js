@@ -7,6 +7,7 @@ const auth = (req, res, next) => {
   if (!userId) {
     res.json({ code: 500, message: "没有登陆" });
     res.end();
+    return;
   }
   next();
 };

@@ -6,7 +6,7 @@ import "./userItem.scss";
 
 const UserItem = (props: UserType) => {
   const navigator = useNavigate();
-  const { avatarUrl, userName, description, _id } = props;
+  const { avatarUrl, nickName, description, _id } = props;
   const handleGotoUser = (e: any) => {
     e.stopPropagation();
     navigator(`/user/${_id}`);
@@ -19,7 +19,7 @@ const UserItem = (props: UserType) => {
         onClick={(e: any) => handleGotoUser(e)}
       />
       <div className="user-main">
-        <div className="user-name">{userName}</div>
+        <div className="user-name">{nickName}</div>
         <div className="user-description">{description}</div>
       </div>
       <FollowButton toUid={_id}/>

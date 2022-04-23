@@ -8,5 +8,6 @@ export type UserType = {
     followings: Array<string>;
     followers: Array<string>;
     postIds: Array<string>;
-    posts:Array<ArticleType>
+    posts:Array<ArticleType>;
+    nickName: string;
 }

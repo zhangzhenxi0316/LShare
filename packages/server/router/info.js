@@ -8,7 +8,7 @@ const auth = require("../middleware/auth");
 let secrect = "qwert";
 
 // 获取user信息
-router.get("/getUserInfo",auth, async (req, res) => {
+router.get("/getUserInfo", auth, async (req, res) => {
   let userId = "";
   const { user_id = "", isSelf = 0 } = req.query;
   if (isSelf) {
@@ -27,11 +27,11 @@ router.get("/getUserInfo",auth, async (req, res) => {
       path: "posts",
       populate: {
         path: "author",
+        select: { password: 0, userName: 0 },
       },
     })
+    // .populate('author')
     .exec();
-
-
   if (userInfo) {
     res.json({ code: 200, message: "查询成功", userInfo });
   } else {

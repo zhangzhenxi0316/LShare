@@ -25,7 +25,8 @@ router.post("/publish",auth, async (req, res) => {
       title,
       content,
       addTime,
-      author: ObjectId(userId)
+      author: ObjectId(userId),
+      comments:[]
     });
     user.posts.unshift(ObjectId(_id));
     const [article] = await Promise.all([articleService.save(), user.save()]);
@@ -37,14 +38,14 @@ router.post("/publish",auth, async (req, res) => {
 });
 router.post("/editorUser",auth, async (req, res) => {
   try {
-    const { avatarUrl, userName, description } = req.body;
+    const { avatarUrl, nickName, description } = req.body;
     const userId =
       (req.cookies.jwt && jwt.verify(req.cookies.jwt, secrect).user_id) || "";
     await UserModel.findByIdAndUpdate(userId, {
       $set: {
         avatarUrl,
         description,
-        userName,
+        nickName,
       },
     });
     res.json({ code: 200, message: "更新成功" });

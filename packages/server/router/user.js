@@ -91,7 +91,7 @@ router.get("/getFollowings", auth, async (req, res) => {
   const userId =
     (req.cookies.jwt && jwt.verify(req.cookies.jwt, secrect).user_id) || "";
   const userInfo = await UserModel.findById(userId)
-    .populate({ path: "followings" })
+    .populate("followings", { password: 0, userName: 0 })
     .exec();
   if (!userInfo) {
     res.json({ code: 400, message: "用户不存在" });
@@ -106,7 +106,7 @@ router.get("/getFollowers", auth, async (req, res) => {
   const userId =
     (req.cookies.jwt && jwt.verify(req.cookies.jwt, secrect).user_id) || "";
   const userInfo = await UserModel.findById(userId)
-    .populate({ path: "followers" })
+    .populate("followers", { password: 0, userName: 0 })
     .exec();
   if (!userInfo) {
     res.json({ code: 400, message: "用户不存在" });
@@ -125,7 +125,10 @@ router.get("/getUserFollowArticle", auth, async (req, res) => {
   userInfo.followers.forEach((item) => {
     PromiseArr.push(
       UserModel.findById(item)
-        .populate({ path: "posts", populate: { path: "author" } })
+        .populate({
+          path: "posts",
+          populate: { path: "author", select: { password: 0, userName: 0 } },
+        })
         .exec()
     );
   });
@@ -174,13 +177,14 @@ router.get("/articleIsMine", auth, async (req, res) => {
   if (!isValidateId(article_id)) {
     res.json({ code: 400, message: "article id不正确" });
     res.end();
+    return;
   }
   const articleInfo = await ArticleModel.findById(article_id);
 
   if (String(articleInfo.author) === userId) {
     res.json({ code: 200, message: "yes" });
   } else {
-    res.json({ code: 400, message: "no" });
+    res.end();
   }
 });
 

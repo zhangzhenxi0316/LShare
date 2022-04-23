@@ -24,11 +24,11 @@ const User = () => {
   }, []);
   return (
     <div className="user-container">
-      <Titlebar title={userInfo.userName} />
+      <Titlebar title={userInfo.nickName} />
       <div className="top-area">
         <div className="user-info">
           <img className="user-avatar" src={userInfo.avatarUrl}></img>
-          <div className="user-name">{userInfo.userName}</div>
+          <div className="user-name">{userInfo.nickName}</div>
           <div className="user-desc">{userInfo.description}</div>
         </div>
       </div>

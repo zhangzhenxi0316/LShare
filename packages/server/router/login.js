@@ -24,6 +24,7 @@ router.post("/login", async (req, res) => {
     const _id = ObjectId();
     const service = new UserModel({
       _id,
+      nickName: `用户${_id}`,
       userName: username,
       password: password,
       avatarUrl:

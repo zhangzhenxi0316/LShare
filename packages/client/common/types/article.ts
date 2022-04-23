@@ -1,3 +1,4 @@
+import { CommentItemType } from "./comment";
 import { UserType } from "./user";
 
 export type ArticleType = {
@@ -8,5 +9,6 @@ export type ArticleType = {
   diggCount: number;
   author: UserType;
   isDigg: boolean;
+  comments: Array<CommentItemType>
 };
 

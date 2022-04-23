@@ -100,7 +100,7 @@ const My = () => {
               </div>
             </div>
           </div>
-          <div className="user-name">{userInfo.userName}</div>
+          <div className="user-name">{userInfo.nickName}</div>
           <div className="user-desc">{userInfo.description}</div>
         </div>
       </div>

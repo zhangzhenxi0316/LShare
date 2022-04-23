@@ -11,7 +11,7 @@ const Push = () => {
   const onImageChange = async (e: any) => {
     e.preventDefault();
     let fileList = e.target.files;
-    if (fileList.length > 4) {
+    if (fileList.length > 6) {
       fileList = fileList.slice(0, 4);
     }
     let localUrls = [];
