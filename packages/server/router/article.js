@@ -153,6 +153,10 @@ router.post("/comment", auth, async (req, res) => {
       ArticleModel.findById(article_id),
       UserModel.findById(userId),
     ]);
+    if(userInfo.ban){
+      res.json({code:400,message:'用户封禁不可发送评论'})
+      return;
+    }
     const commentService = CommentModel({
       _id,
       user: ObjectId(userId),

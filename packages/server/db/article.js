@@ -9,12 +9,10 @@ const schema = new Schema({
     ref: "User",
   },
   covers: [String],
-  comments: [
-    {
+  comments: [{
       type: Schema.Types.ObjectId,
       ref: "Comment",
-    },
-  ],
+    }],
   ban: {
     type: Boolean,
     default: false,

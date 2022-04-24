@@ -113,6 +113,12 @@ const Detail = (props: any) => {
       setTimeout(() => {
         setToast("");
       }, 1000);
+    } else {
+      setInputComment("");
+      setToast(res.data.message);
+      setTimeout(() => {
+        setToast("");
+      }, 1000);
     }
   };
   const renderContent = () => {
