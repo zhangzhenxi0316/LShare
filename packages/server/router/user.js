@@ -163,6 +163,7 @@ router.get("/getUserLikeArticle", auth, async (req, res) => {
     .limit(10)
     .skip(skip)
     .exec();
+  console.log("userInfo>>>>>>", userInfo);
   if (!userInfo) {
     res.json({ code: 400, message: "用户不存在" });
     return;

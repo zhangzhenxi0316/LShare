@@ -62,7 +62,7 @@ router.post("/image", upload.single("file"), (req, res) => {
   fs.rename(path, newFilename, (err) => {
     console.log(err);
   });
-  res.json({ url: `http://192.168.0.103:3000/${newFilename}` });
+  res.json({ url: `http://localhost:3000/${newFilename}` });
 });
 
 module.exports = router;

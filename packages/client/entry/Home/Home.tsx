@@ -4,7 +4,7 @@ import Wrapper from "components/Wrapper/Wrapper";
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import "./home.scss";
-const test: any = [];
+
 const Home = () => {
   const [feedData, setFeedData] = useState<any>([[]]);
   const [hasMore, setHasMore] = useState(true);
@@ -12,8 +12,6 @@ const Home = () => {
   const ref = useRef<any>();
   const getFeed = async (skip: number) => {
     const data = await axiosInstance.get(`/getFeed?skip=${skip}`);
-    console.log("data---", data.data);
-    // data.data.articles.length > 0 &&
     setFeedData([...feedData, data.data.articles]);
     setHasMore(data.data.has_more);
     setSkipNumber(skipNumber + data.data.articles.length);

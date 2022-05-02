@@ -12,8 +12,14 @@
     background-color: #fff;
     z-index: 1000;
     max-width: 525px;
-    margin: 0 auto;
     border-bottom: 0.5px solid rgba($color: #000000, $alpha: 0.2);
+    &,.isPC{
+      margin: 0 auto;
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
     .back-icon {
       background-image: url(../../common/images/back.svg);
       background-size: cover;

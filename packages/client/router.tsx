@@ -86,5 +86,4 @@ export default function AppRoute() {
     </Wrapper>
   );
 }
-// http://localhost:9102/main.31dd70e4a367ec1e4363.bundle.js
-// http://localhost:9102/home/main.92f0713f2b6606540889.bundle.js
+

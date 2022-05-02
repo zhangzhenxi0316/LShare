@@ -50,7 +50,7 @@ const FollowList = () => {
           className={cs("follower-list", { active: active === "follow" })}
           onClick={handleFolowerClick}
         >
-          <div className="center">关注列表</div>
+          <div className="center">粉丝列表</div>
         </div>
       </div>
       <div className="follow-list">

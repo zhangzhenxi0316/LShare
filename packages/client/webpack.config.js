@@ -9,7 +9,9 @@ const autoprefixer = require("autoprefixer");
 const PostCssFlexBugFixes = require("postcss-flexbugs-fixes");
 
 const isDevelopment = process.env.NODE_ENV !== "production";
-console.log(path.resolve(__dirname, "./template/index.html"));
+
+const BundleAnalyzerPlugin =
+  require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 /**
  * @type {Configuration}
  */
@@ -17,8 +19,8 @@ module.exports = merge(webpackCommonConfig, {
   entry: {
     main: "./index.tsx",
   },
-  output:{
-    publicPath: '/'
+  output: {
+    publicPath: "/",
   },
   module: {
     rules: [
@@ -86,6 +88,7 @@ module.exports = merge(webpackCommonConfig, {
       filename: "index.html",
     }),
     isDevelopment && new ReactRefreshWebpackPlugin(),
+    !isDevelopment && new BundleAnalyzerPlugin(),
   ].filter(Boolean),
   devServer: isDevelopment
     ? {
@@ -97,7 +100,6 @@ module.exports = merge(webpackCommonConfig, {
           progress: true,
         },
         historyApiFallback: true,
-        
       }
     : {},
   resolve: {

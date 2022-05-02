@@ -16,6 +16,7 @@
   }
   .draw-container {
     padding-top: 68px;
+    z-index: 1000;
     .draw-item {
       cursor: pointer;
       display: flex;
@@ -33,15 +34,19 @@
     position: fixed;
     right: 0;
     top: 180px;
-    left: 50%;
-    transform: translateX(185px);
-    z-index: 1000;
+    right: 0;
+    z-index: 100;
     background-color: #fff;
     display: flex;
     align-items: center;
     padding-left: 5px;
     border-radius: 8px 0 0 8px;
     overflow: hidden;
+    &.isPC{
+    left: 50%;
+    transform: translateX(185px);
+
+    }
     .like-icon {
       width: 40px;
       height: 40px;

@@ -60,7 +60,7 @@ const Login = () => {
         </div>
         <div className="login-password">
           <div className="login-text">密码:</div>
-          <input type="text" onChange={passwordChange} value={password} />
+          <input type="password" onChange={passwordChange} value={password} />
         </div>
         <div className="login-button" onClick={login}>
           登陆

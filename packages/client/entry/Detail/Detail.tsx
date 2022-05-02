@@ -12,6 +12,7 @@ import FollowButton from "components/FollowButton/FollowButton";
 import "./detail.scss";
 import CommmentItem from "components/CommentItem/CommentItem";
 import { CommentItemType } from "common/types/comment";
+import { isMobile } from "@features/utils";
 const Detail = (props: any) => {
   // const location = useLocation();
   const navigator = useNavigate();
@@ -140,7 +141,10 @@ const Detail = (props: any) => {
           </div>
         </Drawer>
         {toast && <div className="toast">{toast}</div>}
-        <div className="article-like" onClick={handleLike}>
+        <div
+          className={cs("article-like", { isPC: !isMobile() })}
+          onClick={handleLike}
+        >
           <div className={cs("like-icon", { liked })}></div>
         </div>
         <div className="article-title-bar">

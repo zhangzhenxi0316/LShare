@@ -39,7 +39,7 @@ router.post("/login", async (req, res) => {
     res.json({ code: 400, message: "管理员登陆失败" });
   }
 });
-// 删除文章
+
 router.post("/article_ban", adminAuth, async (req, res) => {
   const { article_id, ban = false } = req.body;
   const userId =
@@ -48,7 +48,6 @@ router.post("/article_ban", adminAuth, async (req, res) => {
     AdminModel.findById(userId),
     ArticleModel.findById(article_id),
   ]);
-  console.log("admin---", userId);
   const _id = new ObjectId();
   const _log = new LogModel({
     _id,

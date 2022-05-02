@@ -68,7 +68,7 @@ const Editor = () => {
     <div className="editor-container">
       <div className="editor-titlebar">
         <div className="back-icon" onClick={handleBack}></div>
-        <div className="back-title">Create Account/Login</div>
+        <div className="back-title">编辑你的个人信息</div>
       </div>
       <div className="upload-image-preview">
         <div className="upload-image-area">
