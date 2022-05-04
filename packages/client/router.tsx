@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import Navbar from "components/Navbar/Navbar";
 import Tabs from "components/Tabs/Tabs";
 import Wrapper from "components/Wrapper/Wrapper";
 import Detail from "entry/Detail/Detail";
-import FollowForYou from "entry/FollowForYou/FollowForYou";
-import Home from "entry/Home/Home";
+// import FollowForYou from "entry/FollowForYou/FollowForYou";
+// import Home from "entry/Home/Home";
 import {
   BrowserRouter as Router,
   Routes,
@@ -13,9 +13,9 @@ import {
   Outlet,
   Navigate,
 } from "react-router-dom";
-import FollowList from "entry/FollowList/FollowList";
-import My from "entry/My/My";
-import Push from "entry/Push/Push";
+// import FollowList from "entry/FollowList/FollowList";
+// import My from "entry/My/My";
+// import Push from "entry/Push/Push";
 import Login from "entry/Login/Login";
 import RequireAuth from "components/RequireAuth/RequireAuth";
 import Editor from "entry/Editor/Editor";
@@ -32,7 +32,13 @@ function Chore() {
     </>
   );
 }
-
+const Home = React.lazy(() => import("./entry/Home/Home"));
+const FollowList = React.lazy(() => import("./entry/FollowList/FollowList"));
+const FollowForYou = React.lazy(
+  () => import("./entry/FollowForYou/FollowForYou")
+);
+const Push = React.lazy(() => import("./entry/Push/Push"));
+const My = React.lazy(() => import("./entry/My/My"));
 export default function AppRoute() {
   return (
     <Wrapper>
@@ -41,12 +47,21 @@ export default function AppRoute() {
           {/* <Route path="/"> */}
 
           <Route path="/home" element={<Chore />}>
-            <Route path="" element={<Home />}></Route>
+            <Route
+              path=""
+              element={
+                <Suspense fallback={<div>Loading... </div>}>
+                  <Home />
+                </Suspense>
+              }
+            ></Route>
             <Route
               path="follow-foryou"
               element={
                 <RequireAuth>
+                  <Suspense fallback={<div>Loading... </div>}>
                   <FollowForYou />
+                </Suspense>
                 </RequireAuth>
               }
             ></Route>
@@ -54,7 +69,9 @@ export default function AppRoute() {
               path="follow-list"
               element={
                 <RequireAuth>
+                  <Suspense fallback={<div>Loading... </div>}>
                   <FollowList />
+                </Suspense>
                 </RequireAuth>
               }
             ></Route>
@@ -62,7 +79,9 @@ export default function AppRoute() {
               path="push"
               element={
                 <RequireAuth>
-                  <Push />
+                  <Suspense fallback={<div>Loading... </div>}>
+                  <Push/>
+                </Suspense>
                 </RequireAuth>
               }
             ></Route>
@@ -70,7 +89,9 @@ export default function AppRoute() {
               path="my"
               element={
                 <RequireAuth>
-                  <My />
+                  <Suspense fallback={<div>Loading... </div>}>
+                  <My/>
+                </Suspense>
                 </RequireAuth>
               }
             ></Route>
@@ -86,4 +107,3 @@ export default function AppRoute() {
     </Wrapper>
   );
 }
-

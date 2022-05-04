@@ -22,7 +22,8 @@ function RequireAuth({ children }: any) {
     loginIsValidate();
   }, []);
   return isValidate ? ( // 判断 localstorage 中登录状态是否为 true
-    children
+    <>{children
+    }</>
   ) : (
     <div className="auth-loading">
       <div className="loading-icon"></div>
