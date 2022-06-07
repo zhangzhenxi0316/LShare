@@ -13,7 +13,7 @@ module.exports = {
   devtool: "inline-source-map",
   output: {
     path: path.resolve(process.cwd(), "./build"),
-    filename: "[name].[hash].bundle.js",
+    filename: "[name]-[chunkhash].bundle.js",
   },
   plugins: [new CleanWebpackPlugin(), new friendlyErrorsWebpackPlugin()],
 };

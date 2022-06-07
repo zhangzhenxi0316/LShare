@@ -140,6 +140,8 @@
       font-size: 15px;
       color: rgba($color: #000000, $alpha: 0.7);
       line-height: 25px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
     }
   }
 }

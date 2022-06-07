@@ -1,12 +1,14 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 const { Configuration } = require("webpack");
+// const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const webpackCommonConfig = require("@features/commonConfig");
 const { merge } = require("webpack-merge");
 const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin"); //TODO 不生效
 const pxtorem = require("postcss-pxtorem");
 const autoprefixer = require("autoprefixer");
 const PostCssFlexBugFixes = require("postcss-flexbugs-fixes");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
@@ -38,7 +40,8 @@ module.exports = merge(webpackCommonConfig, {
       {
         test: /\.(scss|css)$/,
         use: [
-          "style-loader",
+          // "style-loader",
+          MiniCssExtractPlugin.loader,
           "css-loader",
           {
             loader: "postcss-loader",
@@ -69,7 +72,6 @@ module.exports = merge(webpackCommonConfig, {
             options: {
               presets: ["@babel/preset-env"],
               plugins: [
-                // "@babel/plugin-transform-runtime",
                 isDevelopment && require.resolve("react-refresh/babel"),
               ].filter(Boolean),
             },
@@ -83,6 +85,7 @@ module.exports = merge(webpackCommonConfig, {
     ],
   },
   plugins: [
+    new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, "./template/index.html"),
       filename: "index.html",
@@ -111,4 +114,11 @@ module.exports = merge(webpackCommonConfig, {
     extensions: [".ts", ".tsx", ".js", ".json"],
     mainFields: ["main", ",module"],
   },
+  optimization: {
+    splitChunks: {
+        // 自动提取所有公共模块到单独 bundle；可选配置有：all，async 和 initial。
+        // 设置为 all 可能特别强大，因为这意味着 chunk 可以在异步和非异步 chunk 之间共享
+        chunks: 'all'
+    }
+},
 });

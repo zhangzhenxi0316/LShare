@@ -102,7 +102,8 @@ router.post("/comment_ban", adminAuth, async (req, res) => {
 });
 
 router.post("/user_ban", adminAuth, async (req, res) => {
-  const { userId, ban = false } = req.body;
+  const { user_id, ban = false } = req.body;
+  console.log('ban',ban)
   const adminId =
     (req.cookies.admin && jwt.verify(req.cookies.admin, secrect).user_id) || "";
   const _id = new ObjectId();
@@ -111,11 +112,11 @@ router.post("/user_ban", adminAuth, async (req, res) => {
     operator: ObjectId(adminId),
     type: ban ? "USER_BAN" : "USER_UNBAN",
     time: Date.now(),
-    user: ObjectId(userId),
+    user: ObjectId(user_id),
   });
   const [log, $, _] = await Promise.all([
     _log.save(),
-    UserModel.findByIdAndUpdate(userId, { $set: { ban } }),
+    UserModel.findByIdAndUpdate(user_id, { $set: { ban } }),
     AdminModel.findByIdAndUpdate(adminId, {
       $push: {
         logs: {
@@ -125,6 +126,7 @@ router.post("/user_ban", adminAuth, async (req, res) => {
       },
     }),
   ]);
+
   res.json({ code: 200, message: "ok", ban, log });
 });
 

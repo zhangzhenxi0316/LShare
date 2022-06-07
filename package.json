@@ -6,7 +6,7 @@
   "author": "zhangzhenxi <zhangzhenxi0316@163.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "pnpm -C ./packages/server dev & pnpm -C ./packages/client dev"
+    "dev": "pnpm -C ./packages/server dev & pnpm -C ./packages/client dev &  pnpm -C ./packages/admin dev"
   },
   "devDependencies": {
     "clean-webpack-plugin": "^4.0.0",

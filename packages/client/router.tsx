@@ -32,20 +32,27 @@ function Chore() {
     </>
   );
 }
-const Home = React.lazy(() => import("./entry/Home/Home"));
-const FollowList = React.lazy(() => import("./entry/FollowList/FollowList"));
+const Home = React.lazy(() => import(
+  "./entry/Home/Home"));
+const FollowList = React.lazy(() => import(
+  /* webpackChunkName: "entries" */
+  "./entry/FollowList/FollowList"));
 const FollowForYou = React.lazy(
-  () => import("./entry/FollowForYou/FollowForYou")
+  () => import(
+  /* webpackChunkName: "entries" */
+    "./entry/FollowForYou/FollowForYou")
 );
-const Push = React.lazy(() => import("./entry/Push/Push"));
-const My = React.lazy(() => import("./entry/My/My"));
+const Push = React.lazy(() => import(
+  /* webpackChunkName: "entries" */
+  "./entry/Push/Push"));
+const My = React.lazy(() => import(
+  /* webpackChunkName: "entries" */
+  "./entry/My/My"));
 export default function AppRoute() {
   return (
     <Wrapper>
       <Router>
         <Routes>
-          {/* <Route path="/"> */}
-
           <Route path="/home" element={<Chore />}>
             <Route
               path=""
